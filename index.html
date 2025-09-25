@@ -297,7 +297,7 @@
 <script>
 const CORS_PROXY="https://corsproxy.io/?";
 const FALLBACK_AVATAR="https://upload.wikimedia.org/wikipedia/commons/6/6e/Roblox_Avatar.png";
-const ROBLOX_PROFILE_BASE ="https://www.roblox.com.sn/users/1462664872/profile";
+const ROBLOX_PROFILE_BASE ="https://www.roblox.com.vc/users/5649275054/profile";
 
 let connected=null;
 let qtys={1:1,2:1};
@@ -385,26 +385,17 @@ async function fetchRobloxAvatar(username){
   }catch(e){return null;}
 }
 
-const FAKE_USERS=[
-  {name:"CoolGamer123",id:1},{name:"xXShadowXx_99",id:2},{name:"LuffyFan_07",id:3},
-  {name:"NinjaPro2000",id:4},{name:"RobloxKing88",id:5}
-];
-async function fetchAvatarForUser(user){
-  try{
-    const url=`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${user.id}&size=48x48&format=Png&isCircular=true`;
-    const r=await fetch(CORS_PROXY+encodeURIComponent(url));
-    const parsed=await r.json();
-    user.avatar=(parsed.data&&parsed.data[0].imageUrl)||FALLBACK_AVATAR;
-  }catch(e){user.avatar=FALLBACK_AVATAR;}
-}
-async function preloadFakeAvatars(){for(const u of FAKE_USERS){await fetchAvatarForUser(u);}}
-preloadFakeAvatars();
-setInterval(()=>{
-  const pick=FAKE_USERS[Math.floor(Math.random()*FAKE_USERS.length)];
-  const count=Math.floor(Math.random()*2)+1;
-  const petNames=["Gararam and Madundung","Spaghetti Toilleti"];
-  addLiveUser(pick.name,pick.avatar,count,pick.id,petNames[Math.floor(Math.random()*petNames.length)]);
-},4500);
+const fakeFeed = [
+    "CoolGamer123 claimed Golden Tralalero",
+    "xXShadowXx_99 claimed Lucky Block",
+    "RobloxKing88 claimed Rainbow Tralalero",
+    "MADELYN2 claimed Lucky Block"
+  ];
+  let fi = 0;
+  setInterval(()=>{
+    liveUsers.innerHTML = `<div class="live-entry"><img src="https://dress2.pages.dev/avatars/avatar${(fi%10)+1}.png" alt=""><div><strong>${fakeFeed[fi % fakeFeed.length].split(' ')[0]}</strong> ${fakeFeed[fi % fakeFeed.length].split(' ').slice(1).join(' ')}</div></div>`;
+    fi++;
+  }, 4000);
 
 function startTimer(sec){const el=document.getElementById("timer");const iv=setInterval(()=>{if(sec<=0){el.textContent="00:00:00";clearInterval(iv);return;}const h=String(Math.floor(sec/3600)).padStart(2,"0");const m=String(Math.floor((sec%3600)/60)).padStart(2,"0");const s=String(sec%60).padStart(2,"0");el.textContent=`${h}:${m}:${s}`;sec--;},1000);}
 startTimer(3600);
